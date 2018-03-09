@@ -20,7 +20,7 @@ var Store = {
             A->B: Normal line
             B-->C: Dashed line
             C-->>A: Dashed open arrow`,
-            options: { theme: 'simple' }
+            options: { theme: 'hand' }
         },
         input: {
             searchObj: {
