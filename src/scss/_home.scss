@@ -1,0 +1,39 @@
+#home {
+
+  #editor { 
+    width: 100%;
+    height: 50%;
+}
+
+  // .origin-input {
+  //   color: $btn-color;
+  //   &:focus {
+  //     outline: none;
+  //     border: 2px solid $btn-color;
+  //   }
+  // }
+  .input-labels {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .ota-div {
+    margin: 0px;
+    padding: 0px;
+  }
+  .ota-select-btn {
+    width: 100%;
+    margin: 0px;
+    border-radius: 0px;
+  }
+  .search-btn {font-size: 1.8em; width: 250px;}
+  .how-to-btn {font-size: 1.2em;}
+
+  // Overrides
+  .modal .overlay ~ * {min-width: 50%;}
+  .awesomplete {display: block;}
+
+}
+
+

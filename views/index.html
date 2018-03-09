@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Trip Services Sequencer - An API Sequence Diagram Tool</title>
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="icon" type="image/gif" href="images/animated_favicon.gif">
+    <link href="https://fonts.googleapis.com/css?family=Chewy" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/picnic.min.css">
+    <link rel="stylesheet" href="css/awesomplete.css">
+    <link rel="stylesheet" href="css/app.bundle.css">
+</head>
+
+<body>
+
+    <!-- Home Screen View -->
+    <section id="home" v-if="homeScreen">
+        <div class="container">
+
+            <div class="flex center pt-20">
+                <h1 class="chewy-font big-font blue">Trip Services Sequencer</h1>
+            </div>
+
+
+            <div class="flex center">
+                <h3 class="">
+                    <em>Find out about your API Sequence Flow.</em>
+                </h3>
+            </div>
+
+            <!-- 3 columns grid -->
+            <div class="flex three-500">
+                <!-- Column 1 -->
+                <div class="pt-20">
+                    <div>
+                        <label for="origin-input" class="input-labels">Flying from</label>
+                        <input type="text" class="origin-input" id="origin" placeholder="e.g. SYD">
+                    </div>
+                    <div>
+                        <label for="destination-input" class="input-labels">Flying to</label>
+                        <input type="text" class="destination-input" id="destination" placeholder="e.g. PEK">
+                    </div>
+                    <div>
+                        <label for="inDate" class="input-labels">Checkin Date</label>
+                        <input type="text" id="inDate" placeholder="yyyy-mm-dd">
+                    </div>
+                    <div>
+                        <label for="outDate" class="input-labels">Checkout Date</label>
+                        <input type="text" id="outDate" placeholder="yyyy-mm-dd">
+                    </div>
+
+                    <div class="center pt-20">
+                        <h3>
+                            <em>Pick your API Scenarios:</em>
+                        </h3>
+                    </div>
+
+                    <div class="center">
+                        <div class="ota-div" v-for="scenario in scenarios">
+                            <label>
+                                <input type="checkbox" :id="scenario.label" @click="toggleScenario(scenario.label)">
+                                <span class="toggle button warning ota-select-btn">{{scenario.label}}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="center" v-if="searchObj.selectedScenarios.length > 0">
+                        <h3>
+                            <em>You've selected:</em>
+                        </h3>
+                        <span class="label success" v-for="i in searchObj.selectedScenarios">{{i}}</span>
+                    </div>
+
+                    <div class="center pt-20">
+                        <div>
+                            <a class="button search-btn fa fa-search fa-1x" @click="submitSearch"> Sketch</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2 -->
+                <!-- API Sequence Diagram -->
+                <div class="center pt-20">
+                    <div id="apiDiagram">
+                        <h3 class="">
+                            <em>API Sequence Flow</em>
+                        </h3>
+                    </div>
+                </div>
+
+                <!-- Column 3 -->
+                <div class="center pt-20">
+                    <h3>
+                        <em>API Sequence Editor</em>
+                    </h3>
+                    <p class="chocolate" v-if="codeError">{{codeErrorMsg}}</p>
+                    <div id="editor">{{apiDiagram.text}}</div>
+                </div>
+
+
+            </div>
+
+            <!-- download json button -->
+            <div class="flex one center pt-20">
+                <div class="indigo">
+                    <i class="fa fa-plane fa-5x"></i>
+                </div>
+                <h2 class="indigo">Your Search & Sketch has been Successful!</h2>
+                <p>
+                    <em>You may download your JSON files by clicking the button below:</em>
+                </p>
+                <div v-if="!isIEBrowser">
+                    <a class="button download-btn fa fa-file-text-o fa-1x success" :href="csvLink" :download="csvName" target="_blank"> Download JSON</a>
+                </div>
+                <div v-if="isIEBrowser">
+                    <a class="button download-btn fa fa-file-text-o fa-1x success" @click="downloadCSV" target="_blank"> Download JSON</a>
+                </div>
+            </div>
+
+            <!-- API Sequence Stats & Performance (Results Screen) -->
+            <div v-if="resultsScreen" class="flex center border-btm">
+                <h3 class="">
+                    <em>Here are some stats from your chosen API Sequence Flow</em>
+                    <strong>Your API Sequence Flow for:</strong>
+                    <div class="ota-div" v-for="scenario in scenarios">
+                        <em v-if="scenarios.length - 1 == 0"></em>
+                        <em v-if="scenarios.length - 1 == 1"></em>
+                    </div>
+                </h3>
+            </div>
+        </div>
+
+        <!-- How-To Modal -->
+        <div class="fixed-top-right">
+            <label for="modal_1" class="button how-to-btn fa fa-book fa-1x"> How to use?</label>
+            <div class="modal">
+                <input id="modal_1" type="checkbox" />
+                <label for="modal_1" class="overlay"></label>
+                <article>
+                    <header>
+                        <h3>
+                            <i class="fa fa-book" aria-hidden="true"></i> How to Use?</h3>
+                        <label for="modal_1" class="close">&times;</label>
+                    </header>
+                    <section class="content">
+                        <p>Step 1 -
+                            <strong>Type in</strong> your hotel search city, state, and country.</p>
+                        <p>Step 2 -
+                            <strong>Select</strong> your checkin & checkout dates.</p>
+                        <p>Step 3 -
+                            <strong>Pick</strong> the API Sequence Flow you want.
+                            <p>Step 4 -
+                                <strong>Click</strong> the
+                                <i class="fa fa-search"></i>
+                                <em> Sketch</em> button.
+                                <strong>Wait for it!</strong>
+                            </p>
+                    </section>
+                    <footer>
+                        <label for="modal_1" class="button dangerous">
+                            <h4>Back to page</h4>
+                        </label>
+                    </footer>
+                </article>
+            </div>
+            <!-- End of How-To Modal -->
+        </div>
+
+        </div>
+        <!-- End of Container -->
+    </section>
+    <!-- End of Home Screen View -->
+
+    <script src="js/awesomplete.js"></script>
+    <script src="js/snap.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script src="js/sequence-diagram-min.js"></script>
+    <script src="js/ace.min.js"></script>
+    <script src="js/app.bundle.js"></script>
+
+</body>
+
+</html>

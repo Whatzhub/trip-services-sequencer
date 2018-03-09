@@ -1,0 +1,82 @@
+// $bg-color: #AEEE00;
+$bg-color: #DFDBE5;
+$fg-color: #5fd7ff;
+$btn-color: #0074d9;
+$text-color: #333333;
+
+html {}
+
+body {
+	color: $text-color;
+	background-color: $bg-color;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.4'%3E%3Cpath opacity='.2' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+	font-family: Heiti TC, helvetica;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.1;
+	font-size: 14px;
+	max-width: 1500px;
+	margin: 0 auto;
+}
+
+body>#home,
+body>#play {display: none;}
+
+body.pg-loaded>#home,
+body.pg-loaded>#play {display: block;}
+
+.fixed-top-right {
+	position: fixed;
+	top: 0px;
+	right: 40px;
+}
+
+
+.container {padding: 0px 40px 0px 40px;}
+.chewy-font {font-family: 'Chewy', cursive;}
+.big-font {font-size: 3em;}
+.italic {font-style: italic;}
+.indigo {color: indigo;}
+.chocolate {color: chocolate;}
+.limegreen {color: limegreen;}
+.blue {color: #0074d9;}
+.gold {color: gold;}
+.white {color: white;}
+.hidden {display: none;}
+.center {text-align: center;}
+.align-center {margin: 0 auto;}
+.right {text-align: right;}
+.border-btm {border-bottom: 1px solid #000}
+.pl-10 {padding-left: 10px;}
+.pb-20 {padding-bottom: 20px;}
+.pt-20 {padding-top: 20px;}
+.pt-50 {padding-top: 50px;}
+.pt-100 {padding-top: 100px;}
+.mt-20 {margin-top: 20px;}
+.mb-20 {margin-bottom: 20px;}
+
+// Random Quotes
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 20px 100px 20px 100px;
+  padding: 20px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+
+// Import Partials
+
+@import "preloader-vendor";
+@import "preloader";
+@import "transitions";
+@import "pikadate";
+@import "home";
+@import "results";
