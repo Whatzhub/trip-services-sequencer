@@ -28,6 +28,12 @@ Note: Run this together with `npm start` for rapid development
 * To display error log details in dev mode
 Run `webpack --display-error-details`
 
+### Git Workflow ###
+* Create new branches named feature/xxx or fix/xxx for new features or bug fixes respectively; they should branch out from the master branch
+* If it's a quick fix, branch off master with hotfix/xxx and merge into master
+* After your new code is completed, go back to master and merge the new branch
+* Do not commit to master branch directly to maintain a proper workflow
+
 ### License
 
 The MIT License (MIT)
