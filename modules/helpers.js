@@ -57,12 +57,12 @@ Helpers.download = function (url) {
 }
 
 
-Helpers.downloadWithRequestLib = function (otaObj, bodyParams) {
+Helpers.downloadWithRequestLib = function (otaObj, url, bodyParams) {
     var timer = 0;
 
     var options = {
         method: otaObj.method || 'POST',
-        url: otaObj.url,
+        url: url,
         headers: otaObj.headers,
         body: bodyParams,
         json: true,
@@ -78,7 +78,7 @@ Helpers.downloadWithRequestLib = function (otaObj, bodyParams) {
     return new Promise((resolve, reject) => {
         request(options, function (error, response, body) {
             if (error) reject(error);
-            console.log(body);
+            // console.log(body);
             clearInterval(timeLapsed);
             resolve(body);
         })

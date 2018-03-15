@@ -18,7 +18,7 @@ app.post('/search', (req, res) => {
   console.log(reqBody);
   Sequencer.sketch(reqBody)
     .then(jsonData => {
-      console.log(jsonData);
+      console.log(21, jsonData);
     
       res.json({
         success: true,
