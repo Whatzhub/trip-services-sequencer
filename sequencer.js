@@ -34,8 +34,8 @@ Sequencer.sketch = async function (reqBody) {
     // let country = 'US';
     // let selectedScenarios = [1];
 
-    let inDate = reqBody.inDate;
-    let outDate = reqBody.outDate;
+    let inDate = reqBody.inDate.split('-').join();
+    let outDate = reqBody.outDate.split('-').join();
     let numGuests = reqBody.numGuests;
     let radius = reqBody.radius;
     let city = reqBody.city;
@@ -50,8 +50,8 @@ Sequencer.sketch = async function (reqBody) {
 
 
     selectedScenarios.forEach((i, el) => {
-        if (i == 0) isRecommendedSelected = true;
-        if (i == 1) isFastSelected = true;
+        if (i == 'Recommended Flow') isRecommendedSelected = true;
+        if (i == 'Fast Flow') isFastSelected = true;
     });
 
     // Hotel Shop API Call

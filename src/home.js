@@ -126,10 +126,15 @@ var home = new Vue({
         submitSearch: function (e) {
 
             // Get latest form input values
-            home.searchObj.origin = document.getElementById('origin').value;
-            home.searchObj.destination = document.getElementById('destination').value;
+            home.searchObj.state = document.getElementById('state').value;
+            home.searchObj.city = document.getElementById('city').value;
+            home.searchObj.country = document.getElementById('country').value;
+            home.searchObj.radius = document.getElementById('radius').value;
+            home.searchObj.numGuests = document.getElementById('numGuests').value;
             home.searchObj.inDate = document.getElementById('inDate').value;
             home.searchObj.outDate = document.getElementById('outDate').value;
+
+            console.log(136, home.searchObj);
 
             // Perform input validation
             var inputValid = this.validateInput();
