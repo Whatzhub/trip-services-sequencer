@@ -24,18 +24,9 @@ var Sequencer = {};
 console.log('Running API Sequencer.\n');
 
 Sequencer.sketch = async function (reqBody) {
-    // Logic Layer for handling client API request
-    // let inDate = '20180501';
-    // let outDate = '20180503';
-    // let numGuests = 1;
-    // let radius = 3;
-    // let city = 'Chicago';
-    // let state = 'IL';
-    // let country = 'US';
-    // let selectedScenarios = [1];
 
-    let inDate = reqBody.inDate.split('-').join();
-    let outDate = reqBody.outDate.split('-').join();
+    let inDate = reqBody.inDate.split('-').join('');
+    let outDate = reqBody.outDate.split('-').join('');
     let numGuests = reqBody.numGuests;
     let radius = reqBody.radius;
     let city = reqBody.city;
