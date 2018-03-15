@@ -3,7 +3,7 @@ A dynamic API Sequence Diagram for understanding Travelport Trip Services
 
 ### Supported Trip Services ###
 
-* Hotel Trip Services
+* Hotel Trip Services v1.0.0
 
 ### App Stack ###
 
