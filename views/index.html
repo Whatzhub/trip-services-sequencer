@@ -33,7 +33,7 @@
             <div class="flex two-600 three-1000">
                 <!-- Column 1 -->
                 <div class="pt-20">
-                    
+
                     <div>
                         <label for="destination-input" class="input-labels">City</label>
                         <input type="text" class="destination-input" id="city" placeholder="e.g. Chicago">
@@ -59,8 +59,8 @@
                             <option>7</option>
                             <option>8</option>
                             <option>9</option>
-                            <option>10</option>                       
-                          </select>
+                            <option>10</option>
+                        </select>
                     </div>
                     <div>
                         <label for="numGuests-input" class="input-labels">Number of guest</label>
@@ -86,7 +86,7 @@
                             <option>18</option>
                             <option>19</option>
                             <option>20</option>
-                          </select>
+                        </select>
                     </div>
                     <div>
                         <label for="inDate" class="input-labels">Checkin Date</label>
@@ -129,6 +129,7 @@
                 <!-- Column 2 -->
                 <!-- API Sequence Diagram -->
                 <div class="center pt-20">
+                    <p>{{loadingText}}</p>
                     <div id="apiDiagram">
                         <h3 class="">
                             <em>API Sequence Flow</em>
@@ -165,17 +166,8 @@
                 </div>
             </div>
 
-            <!-- API Sequence Stats & Performance (Results Screen) -->
-            <div v-if="resultsScreen" class="flex center border-btm">
-                <h3 class="">
-                    <em>Here are some stats from your chosen API Sequence Flow</em>
-                    <strong>Your API Sequence Flow for:</strong>
-                    <div class="ota-div" v-for="scenario in scenarios">
-                        <em v-if="scenarios.length - 1 == 0"></em>
-                        <em v-if="scenarios.length - 1 == 1"></em>
-                    </div>
-                </h3>
-            </div>
+
+
         </div>
 
         <!-- How-To Modal -->
@@ -219,12 +211,31 @@
     </section>
     <!-- End of Home Screen View -->
 
-    <script src="js/awesomplete.js"></script>
+    <!-- API Sequence Stats & Performance (Results Screen) -->
+    <section id="results">
+        <div class="flex center border-btm">
+            <h3 class="">
+                <em>Here are some stats from your chosen API Sequence Flow</em>
+                <!-- <strong>Your API Sequence Flow for:</strong>
+                <div class="ota-div" v-for="scenario in scenarios">
+                    <em v-if="scenarios.length - 1 == 0"></em>
+                    <em v-if="scenarios.length - 1 == 1"></em>
+                </div> -->
+
+                <progress :value="pBar1" :max="20"></progress>
+                <p class="limegreen">
+                    <em>{{sseStats}}</em>
+                </p>
+            </h3>
+        </div>
+    </section>
+
     <script src="js/snap.js"></script>
     <script src="js/underscore.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <script src="js/sequence-diagram-min.js"></script>
     <script src="js/ace.min.js"></script>
+    <script src="js/eventSource.min.js"></script>
     <script src="js/app.bundle.js"></script>
 
 </body>

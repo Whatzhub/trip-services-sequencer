@@ -25,6 +25,8 @@ console.log('Home screen is present');
 // Vue Instance #1 - Home
 var home = new Vue({
     data: {
+        // EventSource Stream
+        es: {},
         // Search Obj
         searchObj: Store.state.input.searchObj,
         // Scenarios Data
@@ -36,7 +38,8 @@ var home = new Vue({
         // API Diagram Data
         apiDiagram: Store.state.apiDiagram,
         // Loading Text
-        loadingText: 'Loading'
+        loadingText: 'Loading',
+
     },
     mounted: function () {
         console.log('Home screen loaded!');
@@ -78,10 +81,10 @@ var home = new Vue({
         // editor.resize();
 
         // Listen to Ace Code changes, make updates to API Diagram
-        editor.session.on('change', function(delta) {
+        editor.session.on('change', function (delta) {
             var removeEl = document.querySelectorAll("svg");
             if (removeEl.length != 0) removeEl[0].outerHTML = '';
-            
+
             try {
                 var newInput = editor.getValue();
                 var d = Diagram.parse(newInput);
@@ -92,7 +95,7 @@ var home = new Vue({
                 home.codeErrorMsg = e.message;
                 console.log(91, e.message);
             }
-            
+
         });
 
         // init datepickers
@@ -140,25 +143,11 @@ var home = new Vue({
             var inputValid = this.validateInput();
             if (!inputValid) return alert('You got to fill in your fields!');
 
-            // Init Search Pending Screen
-            var searchPendingScreen = Wait.pleaseWait({
-                logo: "",
-                backgroundColor: "#c9f1ff",
-                loadingHtml: `
-                    ${Preloaders.foldingCube}
-                    <h3>Please wait while we return your search results...</h3>
-                    <p>${home.loadingText}</p>`
-            });
-
             // Enable simple animation for loading text
             var loaderTimer = setInterval(function () {
-                console.log(118);
-                // console.log(118, home.loadingText);
-                // if (home.loadingText.length > 10) home.loadingText = 'Loading';
-                searchPendingScreen.updateLoadingHtml(`
-                    ${Preloaders.foldingCube}
-                    <h3>Please wait while we return your search results...</h3>
-                    <p>${home.loadingText += '.'}</p>`);
+                console.log(118, home.loadingText);
+                if (home.loadingText.length > 10) home.loadingText = 'Loading';
+                home.loadingText += '.';
             }, 500);
 
             // Send submit request      
@@ -171,52 +160,55 @@ var home = new Vue({
             axios.request(config)
                 .then(function (res) {
                     if (!res.data.success) throw new Error('Request failed');
-                    var response = res.data.data;
-                    // console.log(147, response);
+                    console.log(189, res.data.success);
                     clearInterval(loaderTimer);
-                    searchPendingScreen.finish();
-
-                    // Init Search Pending Screen
-                    var successScreen = Wait.pleaseWait({
-                        logo: "",
-                        backgroundColor: "#c9f1ff",
-                        loadingHtml: `
-                        <h1 class="limegreen"><i class="fa fa-check"></i> Success!</h1>
-                        <h3>Returning your search results...</h3>`
-                    });
-                    setTimeout(function () {
-                        // Change to plain background
-                        var body = document.getElementsByTagName('body')[0];
-                        body.style.backgroundImage = 'none';
-                        home.homeScreen = false;
-                        results.resultsScreen = true;
-                        successScreen.finish();
-                    }, 2000);
-                    return response;
-                })
-                .then(function (response) {
-                    var csvArr = response;
-                    console.log(172, csvArr);
-
-                    // set data to Results vue instance
-                    results.jsonData.dataArr = csvArr;
-                    results.searchObj = home.searchObj;
-
-                    // Perform calculations
-                    results.calcStats(csvArr);
-                    results.createDownloadBtn(csvArr);
+                    home.SSEStart();
                 })
                 .catch(function (err) {
-                    console.log(126, err);
-                    clearInterval(loaderTimer);
-                    searchPendingScreen.finish();
+                    console.log(127, err);
+                    home.es.close();
                     alert('Request failed. Please retry with a non-VPN network.')
-                });
+                })
+
 
         },
         getLoaderText: function () {
             // TODO: Generate a dynamic loading text...
 
+        },
+        SSEStart: function () {
+            // Clear SSE Stats
+            results.sseStats = '';
+            results.pBar1 = 0;
+
+            // EventSource Stream
+            home.es = new EventSource('/apiSearch');
+
+            // Event Stream Listeners
+            home.es.addEventListener('HOTEL-API', function (e) {
+                var d = JSON.parse(e.data);
+                console.log(132, d);
+                results.pBar1 += Math.round(d.timeLapsed);
+
+                // SSE Stats
+                var data = `${d.event} took ${d.timeLapsed} secs total.`;
+                results.sseStats += data;
+
+                if (e.lastEventId == 'Done') {
+                    // Close connection.
+                    home.es.close();
+                    return console.log(e, 'connection closed')
+                }
+            });
+
+            home.es.addEventListener('open', function (e) {
+                console.log(e, 'connection opens');
+            });
+
+            home.es.addEventListener('error', function (e) {
+                console.log(e, 'connection error & closed');
+                home.es.close();
+            });
         },
         toggleScenario: function (id) {
             // Allow single or multipe API scenarios sketching
@@ -247,7 +239,10 @@ var results = new Vue({
         searchObj: {},
         jsonLink: '',
         jsonName: '',
-        jsonData: {}
+        jsonData: {},
+        // Progress Bars & Text
+        pBar1: 0,
+        sseStats: ''
     },
     mounted: function () {
         console.log('Results screen loaded!');
