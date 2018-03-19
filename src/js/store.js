@@ -37,6 +37,25 @@ var Store = {
                 country: '', // e.g. US
                 selectedScenarios: [] // e.g. [0, 1]
             }
+        },
+        output: {
+            jsonObj: {
+                shop: {
+                    link: '',
+                    name: '',
+                    show: false,
+                },
+                details: {
+                    link: '',
+                    name: '',
+                    show: false,
+                },
+                avail: {
+                    link: '',
+                    name: '',
+                    show: false
+                }
+            }
         }
     }
 };

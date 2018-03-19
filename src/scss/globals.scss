@@ -45,10 +45,11 @@ body.pg-loaded>#play {display: block;}
 .small-font {font-size: 0.7em;}
 .italic {font-style: italic;}
 .indigo {color: indigo;}
-.chocolate {color: chocolate;}
-.limegreen {color: limegreen;}
-.blue {color: #0074d9;}
-.gold {color: gold;}
+.bg-color{color: $bg-color;}
+.bg-color-2 {color: $bg-color2;}
+.bg-color-3 {color: $bg-color3;}
+.btn-color {color: $btn-color;}
+.theme-color-4 {color: gold;}
 .white {color: white;}
 .hidden {display: none;}
 .center {text-align: center;}

@@ -43,9 +43,7 @@ var home = new Vue({
         // Results Data
         resultsScreen: false,
         isIEBrowser: false,
-        jsonLink: '',
-        jsonName: '',
-        jsonData: {}
+        jsonObj: Store.state.output.jsonObj,
     },
     mounted: function () {
         console.log('Home screen loaded!');
@@ -133,6 +131,14 @@ var home = new Vue({
             // Enable simple animation for loading text
             home.loader = true;
 
+            // Clear JSON File status
+            home.jsonObj.shop.show = false;
+            home.jsonObj.shop.link = '';
+            home.jsonObj.details.show = false;
+            home.jsonObj.details.link = '';
+            home.jsonObj.avail.show = false;
+            home.jsonObj.avail.link = '';
+
             // Send submit request      
             var config = {
                 method: 'post',
@@ -177,6 +183,9 @@ var home = new Vue({
                 var data = `${d.event} took ${d.timeLapsed} secs total.`;
                 home.sseStats += data;
 
+                // Create downloadable JSON
+                home.createDownloadBtn(d.event, d.data);
+
                 if (e.lastEventId == 'Done') {
                     // Close connection.
                     home.es.close();
@@ -217,11 +226,30 @@ var home = new Vue({
             });
             return valid;
         },
-        createDownloadBtn: function (csvArr) {
-            // TODO: Create Download JSON Button
+        createDownloadBtn: function (fileName, json) {
+            var jsonObj = JSON.stringify(json);
+            var blob = new Blob([jsonObj], {
+                type: "text/json; charset=utf-8"
+            });
+            if (fileName.indexOf('Shop') > -1 && home.jsonObj.shop.link == '') {
+                home.jsonObj.shop.link = URL.createObjectURL(blob);
+                home.jsonObj.shop.name = `Hotel_Shop.json`;
+                home.jsonObj.shop.show = true;
+            }
+            if (fileName.indexOf('Details') > -1 && home.jsonObj.details.link == '') {
+                home.jsonObj.details.link = URL.createObjectURL(blob);
+                home.jsonObj.details.name = `Hotel_Details.json`;
+                home.jsonObj.details.show = true;
+            }
+            if (fileName.indexOf('Avail') > -1 && home.jsonObj.avail.link == '') {
+                home.jsonObj.avail.link = URL.createObjectURL(blob);
+                home.jsonObj.avail.name = `Hotel_Avail.json`;
+                home.jsonObj.avail.show = true;
+            }
         },
         downloadJSON: function () {
             // TODO: Create JSON Download File
+            console.log(236, 'downloaded JSON');
         },
         calcStats: function (apiResponses) {
             // TODO: Calculate basic stats for each API response time & file size
