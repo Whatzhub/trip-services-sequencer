@@ -6,8 +6,8 @@ var Store = {
         },
         scenarios: {
             scenarioMap: [
-                { label: 'Recommended Flow', name: 'Hotel Search => Hotel Details => Hotel Availability (Recommended)' },
-                { label: 'Fast Flow', name: 'Hotel Search => Hotel Availability' },
+                { label: 'Recommended Flow', name: '(RECOMMENDED) Hotel Search => Hotel Details => Hotel Availability' },
+                { label: 'Fast Flow', name: '(FAST FLOW) Hotel Search => Hotel Availability' },
             ]
         },
         apiDiagram: {
@@ -60,6 +60,10 @@ var Store = {
                     name: '',
                     show: false
                 }
+            },
+            svgObj: {
+                link: '',
+                name: ''
             }
         }
     }

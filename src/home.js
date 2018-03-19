@@ -29,9 +29,11 @@ var home = new Vue({
         scenarios: Store.state.scenarios.scenarioMap,
         chosenScenarios: [],
         // Home Data
-        homeScreen: true,
+        homeScreen: false,
         codeError: false,
         codeErrorMsg: '',
+        // Editor
+        editor: {},
         // API Diagram Data
         apiDiagram: Store.state.apiDiagram,
         // Loading Text
@@ -45,10 +47,12 @@ var home = new Vue({
         resultsScreen: false,
         isIEBrowser: false,
         jsonObj: Store.state.output.jsonObj,
+        svgObj: Store.state.output.svgObj
     },
     mounted: function () {
-        console.log('Home screen loaded!');
-        loadingScreen.finish();
+        // init API Diagram
+        var d = Diagram.parse(home.apiDiagram.text);
+        d.drawSVG('apiDiagram', home.apiDiagram.options);
 
         // Init Sweet Scroll
         const scroller = new SweetScroll();
@@ -56,27 +60,23 @@ var home = new Vue({
         // Inite Scroll Reveal
         window.sr = ScrollReveal({ reset: true });
         sr.reveal('#home-dashboard');
-
-        // init API Diagram
-        var d = Diagram.parse(home.apiDiagram.text);
-        d.drawSVG('apiDiagram', home.apiDiagram.options);
-
+        
         // init Ace Code Editor
-        var editor = ace.edit("editor");
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/javascript");
-        editor.session.setUseWrapMode(true);
-
+        home.editor = ace.edit("editor");
+        home.editor.setTheme("ace/theme/monokai");
+        home.editor.session.setMode("ace/mode/javascript");
+        home.editor.session.setUseWrapMode(true);
 
         // Listen to Ace Code changes, make updates to API Diagram
-        editor.session.on('change', function (delta) {
+        home.editor.session.on('change', function (delta) {
             var svgEl = document.getElementById('apiDiagram');
             svgEl.innerHTML = '';
 
             try {
-                var newInput = editor.getValue();
+                var newInput = home.editor.getValue();
                 var d = Diagram.parse(newInput);
                 d.drawSVG('apiDiagram', home.apiDiagram.options);
+                home.createSVG();
                 home.codeError = false;
             } catch (e) {
                 home.codeError = true;
@@ -111,6 +111,16 @@ var home = new Vue({
                 home.searchObj.outDate = moment(date).format('YYYY-MM-DD');
             }
         });
+
+        // init SVG download button
+        setTimeout(function() {
+            home.createSVG();
+            home.homeScreen = true;
+        }, 5000);
+
+        console.log('Home screen loaded!');
+        
+        loadingScreen.finish();
     },
     methods: {
         submitSearch: function (e) {
@@ -213,7 +223,7 @@ var home = new Vue({
             }
         },
         SSEStart: function () {
-            
+
 
             // EventSource Stream
             home.es = new EventSource('/apiSearch');
@@ -222,12 +232,13 @@ var home = new Vue({
             home.es.addEventListener('HOTEL-API', function (e) {
                 var d = JSON.parse(e.data);
                 console.log(132, d);
-
-                home.createDiagram(d);
-
-                home.timeBar += Math.round(d.timeLapsed * 10);
-                home.timeSecs += +d.timeLapsed;
                 
+                home.createDiagram(d);
+                
+                home.timeBar += Math.round(d.timeLapsed * 20);
+                home.timeSecs += +d.timeLapsed;
+                home.timeSecs = +home.timeSecs.toFixed(2);
+
 
                 // SSE Stats
                 var data = `${d.event} took ${d.timeLapsed} secs total.`;
@@ -239,6 +250,8 @@ var home = new Vue({
                     // Close connection.
                     home.es.close();
                     home.loader = false;
+                    // Update latest SVG
+                    home.createSVG();
                     return console.log(e, 'connection closed')
                 }
             });
@@ -284,9 +297,16 @@ var home = new Vue({
                 home.jsonObj.avail.show = true;
             }
         },
-        downloadJSON: function () {
-            // TODO: Create JSON Download File
-            console.log(236, 'downloaded JSON');
+        createSVG: function () {
+            var svg = document.getElementById('apiDiagram').getElementsByClassName('sequence')[0];
+            var width = parseInt(svg.width.baseVal.value);
+            var height = parseInt(svg.height.baseVal.value);
+            var data = home.editor.getValue();
+            var xml = '<?xml version="1.0" encoding="utf-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"><svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '" xmlns:xlink="http://www.w3.org/1999/xlink"><source><![CDATA[' + data + ']]></source>' + svg.innerHTML + '</svg>';
+
+            home.svgObj.link = "data:image/svg+xml," + encodeURIComponent(xml);
+            home.svgObj.name = 'Seq_diagram.svg';
+            console.log(236, 'downloaded SVG');
         },
         calcStats: function (apiResponses) {
             // TODO: Calculate basic stats for each API response time & file size
