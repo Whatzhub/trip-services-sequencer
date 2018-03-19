@@ -11,15 +11,18 @@ var Store = {
             ]
         },
         apiDiagram: {
-            text: `Title: API Sequence Diagram
-            Note left of A: Next API #1
-            A->B: Normal line
-            B-->C: Dashed line
-            C-->>A: Dashed open arrow
-            Note left of A: Next API #2
-            A->B: Normal line
-            B-->C: Dashed line
-            C-->>A: Dashed open arrow`,
+            party1: "OTA",
+            party2: "Travelport",
+            text: `Title: API Sequence Diagram`,
+            // text: `Title: API Sequence Diagram
+            // Note left of A: Next API #1
+            // A->B: Normal line
+            // B-->C: Dashed line
+            // C-->>A: Dashed open arrow
+            // Note left of A: Next API #2
+            // A->B: Normal line
+            // B-->C: Dashed line
+            // C-->>A: Dashed open arrow`,
             options: { theme: 'hand' }
         },
         input: {
