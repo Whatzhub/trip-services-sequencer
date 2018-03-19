@@ -38,7 +38,8 @@ var home = new Vue({
         loader: false,
         loadingText: 'Loading',
         // Progress Bars & Text
-        pBar1: 0,
+        timeBar: 0,
+        timeSecs: 0,
         sseStats: '',
         // Results Data
         resultsScreen: false,
@@ -131,6 +132,11 @@ var home = new Vue({
             // Enable simple animation for loading text
             home.loader = true;
 
+            // Clear SSE Stats
+            home.sseStats = '';
+            home.timeSecs = 0;
+            home.timeBar = 0;
+
             // Clear JSON File status
             home.jsonObj.shop.show = false;
             home.jsonObj.shop.link = '';
@@ -161,14 +167,8 @@ var home = new Vue({
 
 
         },
-        getLoaderText: function () {
-            // TODO: Generate a dynamic loading text...
-
-        },
         SSEStart: function () {
-            // Clear SSE Stats
-            home.sseStats = '';
-            home.pBar1 = 0;
+            
 
             // EventSource Stream
             home.es = new EventSource('/apiSearch');
@@ -177,11 +177,11 @@ var home = new Vue({
             home.es.addEventListener('HOTEL-API', function (e) {
                 var d = JSON.parse(e.data);
                 console.log(132, d);
-                home.pBar1 += Math.round(d.timeLapsed);
+                home.timeBar += Math.round(d.timeLapsed * 10);
+                home.timeSecs += +d.timeLapsed;
 
                 // SSE Stats
                 var data = `${d.event} took ${d.timeLapsed} secs total.`;
-                home.sseStats += data;
 
                 // Create downloadable JSON
                 home.createDownloadBtn(d.event, d.data);

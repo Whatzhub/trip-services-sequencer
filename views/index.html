@@ -93,8 +93,7 @@
                     <div class="third">
                         <p>
                             <i class="fas fa-clock"></i> Time Taken:
-                            <span class="time-bar" style="padding-right:0px;">{{sseStats}} 10s</span>
-                            <span class="time-bar2" style="padding-right:0px;">10s</span>
+                            <span v-if="timeBar > 0" class="time-bar" :style="{ paddingRight: timeBar + 'px'}">{{timeSecs}} secs </span>
                         </p>
                     </div>
                 </div>
