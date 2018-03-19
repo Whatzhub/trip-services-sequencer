@@ -6,23 +6,27 @@ var Store = {
         },
         scenarios: {
             scenarioMap: [
-                { label: 'Recommended Flow', name: '(RECOMMENDED) Hotel Search => Hotel Details => Hotel Availability' },
-                { label: 'Fast Flow', name: '(FAST FLOW) Hotel Search => Hotel Availability' },
+                { label: 'Recommended Flow', name: 'Hotel Search => Hotel Details => Hotel Availability (Recommended)' },
+                { label: 'Fast Flow', name: 'Hotel Search => Hotel Availability' },
             ]
         },
         apiDiagram: {
             party1: "OTA",
             party2: "Travelport",
-            text: `Title: API Sequence Diagram`,
-            // text: `Title: API Sequence Diagram
-            // Note left of A: Next API #1
-            // A->B: Normal line
-            // B-->C: Dashed line
-            // C-->>A: Dashed open arrow
-            // Note left of A: Next API #2
-            // A->B: Normal line
-            // B-->C: Dashed line
-            // C-->>A: Dashed open arrow`,
+            title: 'API Sequence Diagram',
+            text: `Title: Hotels Sequence Diagram 
+    Note over Client: Recommended Flow
+    Client->Hotel Search: Request
+    Hotel Search-->Client: 2 secs
+    Client->Hotel Details: Request
+    Hotel Details-->Client: 2 secs
+    Client->Hotel Avail: Request
+    Hotel Avail-->Client: 3 secs
+    Note over Client: Fast Flow
+    Client->Hotel Search: Request
+    Hotel Search-->Client: 2 secs
+    Client->Hotel Avail: Request
+    Hotel Avail-->Client: 3 secs`,
             options: { theme: 'hand' }
         },
         input: {

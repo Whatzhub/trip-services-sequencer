@@ -4,236 +4,242 @@
 <head>
     <title>Trip Services Sequencer - An API Sequence Diagram Tool</title>
     <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="icon" type="image/gif" href="images/animated_favicon.gif">
-    <link href="https://fonts.googleapis.com/css?family=Chewy" rel="stylesheet">
-    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/picnic.min.css">
     <link rel="stylesheet" href="css/awesomplete.css">
     <link rel="stylesheet" href="css/app.bundle.css">
+    <script src="js/fontawesome-all.min.js"></script>
 </head>
 
 <body>
 
     <!-- Home Screen View -->
     <section id="home" v-if="homeScreen">
-        <div class="container">
 
-            <div class="flex center pt-20">
-                <h1 class="chewy-font big-font blue">Trip Services Sequencer</h1>
+        <div id="home-nav">
+            <div class="container">
+                <div class="flex">
+                    <h3 class="">
+                        <i class="fas fa-exchange-alt"></i> TS Sequencer </h3>
+                </div>
             </div>
+        </div>
 
-
-            <div class="flex center">
-                <h3 class="">
-                    <em>Find out about your API Sequence Flow.</em>
-                </h3>
+        <div id="home-top">
+            <div class="container">
+                <div class="flex two-600">
+                    <div class="third">
+                        <h1 class="">TS Sequencer</h1>
+                        <p>A simple and easy way to visualise Travelport's Hotel Trip Services. Draw and customise your own
+                            API Sequence Diagrams. It's fun and it's free.</p>
+                        <button class="get-started" href="#home-status" data-scroll>Get Started</button>
+                    </div>
+                    <div class="two-third center">
+                        <img src="/images/sequence.png" />
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <!-- 3 columns grid -->
-            <div class="flex two-600 three-1000">
-                <!-- Column 1 -->
-                <div class="pt-20">
+        <div id="home-status" class="border-btm">
+            <div class="container">
+                <div class="flex center">
+                    <div class="full">
+                        <h2 class="">
+                            <i class="fas fa-exchange-alt"></i> TS Sequencer Status:
+                            <span v-if="!loader" class="small-font italic">Awaiting input
+                                <span class="pl-5">
+                                    <i class="fas fa-cog fa-spin "></i>
+                                </span>
+                            </span>
+                            <span v-if="loader" class="small-font italic">Sketching
+                                <span class="pl-5">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </span>
+                        </h2>
 
-                    <div>
-                        <label for="destination-input" class="input-labels">City</label>
-                        <input type="text" class="destination-input" id="city" placeholder="e.g. Chicago">
                     </div>
-                    <div>
-                        <label for="state-input" class="input-labels">State</label>
-                        <input type="text" class="destination-input" id="state" placeholder="e.g. IL">
-                    </div>
-                    <div>
-                        <label for="country-input" class="input-labels">Country</label>
-                        <input type="text" class="destination-input" id="country" placeholder="e.g. US">
-                    </div>
-                    <div>
-                        <label for="radius-input" class="input-labels">Radius</label>
-                        <!-- <input type="text"  placeholder="1"> -->
-                        <select class="destination-input" id="radius">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="numGuests-input" class="input-labels">Number of guest</label>
-                        <!-- <input type="text"  placeholder="1"> -->
-                        <select class="destination-input" id="numGuests">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                            <option>16</option>
-                            <option>17</option>
-                            <option>18</option>
-                            <option>19</option>
-                            <option>20</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="inDate" class="input-labels">Checkin Date</label>
-                        <input type="text" id="inDate" placeholder="yyyy-mm-dd">
-                    </div>
-                    <div>
-                        <label for="outDate" class="input-labels">Checkout Date</label>
-                        <input type="text" id="outDate" placeholder="yyyy-mm-dd">
-                    </div>
+                </div>
+                <div class="flex center">
+                    <div class="third">
+                        <p>
+                            <i class="fas fa-file"></i> JSON Files:
+                            <span>
+                                <a v-if="jsonObj.shop.show" class="button download" :href="jsonObj.shop.link" :download="jsonObj.shop.name" target="_blank">
+                                    </i>
+                                    {{jsonObj.shop.name}} <i class="fas fa-download"></i></a>
+                            </span>
+                            <span>
+                                <a v-if="jsonObj.details.show" class="button download tooltip-top" :href="jsonObj.details.link" :download="jsonObj.details.name" data-tooltip="Results for 1st result with open status" target="_blank">
+                                        
+                                    {{jsonObj.details.name}} <i class="fas fa-download"></i></a>
+                            </span>
+                            <span>
+                                <a v-if="jsonObj.avail.show" class="button download tooltip-top" :href="jsonObj.avail.link" :download="jsonObj.avail.name" data-tooltip="Results for 1st result with open status" target="_blank">
+                                    </i>
+                                    {{jsonObj.avail.name}} <i class="fas fa-download"></i></a>
+                            </span>
+                        </p>
 
-                    <div class="center pt-20">
-                        <h3>
-                            <em>Pick your API Scenarios:</em>
-                        </h3>
-                    </div>
 
-                    <div class="center">
-                        <div class="ota-div" v-for="scenario in scenarios">
-                            <label>
-                                <input type="checkbox" :id="scenario.label" @click="toggleScenario(scenario.label)">
-                                <span class="toggle button warning ota-select-btn">{{scenario.label}}</span>
-                            </label>
+
+
+                    </div>
+                    <div class="third">
+                        <p>
+                            <i class="fas fa-file-image"></i> SVG File:
+                        </p>
+                    </div>
+                    <div class="third">
+                        <p>
+                            <i class="fas fa-clock"></i> Time Taken:
+                            <span v-if="timeBar > 0" class="time-bar" :style="{ paddingRight: timeBar + 'px'}">{{timeSecs}} secs </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="home-dashboard">
+            <div class="container">
+                <div class="flex four-600">
+                    <!-- Column 1 -->
+                    <div class="fourth">
+                        <div class="flex three">
+                            <div>
+                                <label for="destination-input" class="stack input-labels">City</label>
+                                <input type="text" class="stack" id="city" placeholder="e.g. Chicago">
+                            </div>
+                            <div>
+                                <label for="state-input" class="input-labels">State</label>
+                                <input type="text" class="stack" id="state" placeholder="e.g. IL">
+                            </div>
+                            <div>
+                                <label for="country-input" class="input-labels">Country</label>
+                                <input type="text" class="stack" id="country" placeholder="e.g. US">
+                            </div>
+                        </div>
+
+                        <div class="flex two">
+                            <div>
+                                <label for="radius-input" class="input-labels">Radius (Miles)</label>
+                                <!-- <input type="text"  placeholder="1"> -->
+                                <select class="stack" id="radius">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="numGuests-input" class="input-labels">Number of guest</label>
+                                <!-- <input type="text"  placeholder="1"> -->
+                                <select class="stack" id="numGuests">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex two">
+                            <div>
+                                <label for="inDate" class="input-labels">Checkin Date</label>
+                                <input type="text" class="stack" id="inDate" placeholder="yyyy-mm-dd">
+                            </div>
+                            <div>
+                                <label for="outDate" class="input-labels">Checkout Date</label>
+                                <input type="text" class="stack" id="outDate" placeholder="yyyy-mm-dd">
+                            </div>
+                        </div>
+
+                        <div class="center">
+                            <h3>
+                                <em>Pick your API Scenarios:</em>
+                            </h3>
+                        </div>
+
+                        <div class="center">
+                            <div class="ota-div" v-for="scenario in scenarios">
+                                <label>
+                                    <input class="stack" type="checkbox" :id="scenario.label" @click="toggleScenario(scenario.label, scenario.name)">
+                                    <span class="toggle button ota-select-btn">{{scenario.label}}</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="center" v-if="searchObj.selectedScenarios.length > 0">
+                            <h3>
+                                <em>You've selected:</em>
+                            </h3>
+                            <article class="card" v-for="i in chosenScenarios">
+                                <header>
+                                    <p>{{i}}</p>
+                                </header>
+                            </article>
+                        </div>
+
+                        <div class="center">
+                            <div v-if="!loader">
+                                <a class="button search-btn" @click="submitSearch">
+                                    <span>Sketch</span>
+                                </a>
+                            </div>
+                            <div v-if="loader">
+                                <a class="button search-btn" disabled>
+                                    <span>Sketching</span>
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="center" v-if="searchObj.selectedScenarios.length > 0">
-                        <h3>
-                            <em>You've selected:</em>
-                        </h3>
-                        <span class="label success" v-for="i in searchObj.selectedScenarios">{{i}}</span>
-                    </div>
-
-                    <div class="center pt-20">
-                        <div>
-                            <a class="button search-btn fa fa-search fa-1x" @click="submitSearch"> Sketch</a>
+                    <!-- Column 2 -->
+                    <!-- API Sequence Diagram -->
+                    <div class="half center">
+                        <div id="apiDiagram">
                         </div>
                     </div>
-                </div>
 
-                <!-- Column 2 -->
-                <!-- API Sequence Diagram -->
-                <div class="center pt-20">
-                    <p>{{loadingText}}</p>
-                    <div id="apiDiagram">
-                        <h3 class="">
-                            <em>API Sequence Flow</em>
-                        </h3>
+                    <!-- Column 3 -->
+                    <div class="fourth pt-20">
+                        <p class="chocolate" v-if="codeError">{{codeErrorMsg}}</p>
+                        <div id="editor">{{apiDiagram.text}}</div>
                     </div>
-                </div>
 
-                <!-- Column 3 -->
-                <div class="center pt-20">
-                    <h3>
-                        <em>API Sequence Editor</em>
-                    </h3>
-                    <p class="chocolate" v-if="codeError">{{codeErrorMsg}}</p>
-                    <div id="editor">{{apiDiagram.text}}</div>
-                </div>
 
+                </div>
 
             </div>
-
-            <!-- download json button -->
-            <div class="flex one center pt-20">
-                <div class="indigo">
-                    <i class="fa fa-plane fa-5x"></i>
-                </div>
-                <h2 class="indigo">Your Search & Sketch has been Successful!</h2>
-                <p>
-                    <em>You may download your JSON files by clicking the button below:</em>
-                </p>
-                <div v-if="!isIEBrowser">
-                    <a class="button download-btn fa fa-file-text-o fa-1x success" :href="csvLink" :download="csvName" target="_blank"> Download JSON</a>
-                </div>
-                <div v-if="isIEBrowser">
-                    <a class="button download-btn fa fa-file-text-o fa-1x success" @click="downloadCSV" target="_blank"> Download JSON</a>
-                </div>
-            </div>
-
-
-
-        </div>
-
-        <!-- How-To Modal -->
-        <div class="fixed-top-right">
-            <label for="modal_1" class="button how-to-btn fa fa-book fa-1x"> How to use?</label>
-            <div class="modal">
-                <input id="modal_1" type="checkbox" />
-                <label for="modal_1" class="overlay"></label>
-                <article>
-                    <header>
-                        <h3>
-                            <i class="fa fa-book" aria-hidden="true"></i> How to Use?</h3>
-                        <label for="modal_1" class="close">&times;</label>
-                    </header>
-                    <section class="content">
-                        <p>Step 1 -
-                            <strong>Type in</strong> your hotel search city, state, and country.</p>
-                        <p>Step 2 -
-                            <strong>Select</strong> your checkin & checkout dates.</p>
-                        <p>Step 3 -
-                            <strong>Pick</strong> the API Sequence Flow you want.
-                            <p>Step 4 -
-                                <strong>Click</strong> the
-                                <i class="fa fa-search"></i>
-                                <em> Sketch</em> button.
-                                <strong>Wait for it!</strong>
-                            </p>
-                    </section>
-                    <footer>
-                        <label for="modal_1" class="button dangerous">
-                            <h4>Back to page</h4>
-                        </label>
-                    </footer>
-                </article>
-            </div>
-            <!-- End of How-To Modal -->
-        </div>
-
         </div>
         <!-- End of Container -->
     </section>
     <!-- End of Home Screen View -->
 
-    <!-- API Sequence Stats & Performance (Results Screen) -->
-    <section id="results">
-        <div class="flex center border-btm">
-            <h3 class="">
-                <em>Here are some stats from your chosen API Sequence Flow</em>
-                <!-- <strong>Your API Sequence Flow for:</strong>
-                <div class="ota-div" v-for="scenario in scenarios">
-                    <em v-if="scenarios.length - 1 == 0"></em>
-                    <em v-if="scenarios.length - 1 == 1"></em>
-                </div> -->
-
-                <progress :value="pBar1" :max="20"></progress>
-                <p class="limegreen">
-                    <em>{{sseStats}}</em>
-                </p>
-            </h3>
-        </div>
-    </section>
+    <!-- Footer (Results Screen) -->
+    <div class="flex center mt-20">
+        <p class="">
+            <span class="">Made with ❤ in Hong Kong</span>
+        </p>
+    </div>
 
     <script src="js/snap.js"></script>
     <script src="js/underscore.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <script src="js/sequence-diagram-min.js"></script>
+    <script src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js"></script>
+    <script src="js/sweet-scroll.min.js"></script>
     <script src="js/ace.min.js"></script>
     <script src="js/eventSource.min.js"></script>
     <script src="js/app.bundle.js"></script>
