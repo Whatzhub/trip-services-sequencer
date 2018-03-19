@@ -5,7 +5,7 @@
     <title>Trip Services Sequencer - An API Sequence Diagram Tool</title>
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/picnic.min.css">
-    <link rel="stylesheet" href="css/awesomplete.css">
+    <link rel="stylesheet" href="css/animate.min.css">
     <link rel="stylesheet" href="css/app.bundle.css">
     <script src="js/fontawesome-all.min.js"></script>
 </head>
@@ -13,7 +13,7 @@
 <body>
 
     <!-- Home Screen View -->
-    <section id="home" v-if="homeScreen">
+    <section id="home">
 
         <div id="home-nav">
             <div class="container">
@@ -48,7 +48,7 @@
                             <i class="fas fa-exchange-alt"></i> TS Sequencer Status:
                             <span v-if="!loader" class="small-font italic">Awaiting input
                                 <span class="pl-5">
-                                    <i class="fas fa-cog fa-spin "></i>
+                                    <i class="fas fa-cog fa-spin"></i>
                                 </span>
                             </span>
                             <span v-if="loader" class="small-font italic">Sketching
@@ -64,36 +64,57 @@
                     <div class="third">
                         <p>
                             <i class="fas fa-file"></i> JSON Files:
-                            <span>
-                                <a v-if="jsonObj.shop.show" class="button download" :href="jsonObj.shop.link" :download="jsonObj.shop.name" target="_blank">
-                                    </i>
-                                    {{jsonObj.shop.name}} <i class="fas fa-download"></i></a>
-                            </span>
-                            <span>
-                                <a v-if="jsonObj.details.show" class="button download tooltip-top" :href="jsonObj.details.link" :download="jsonObj.details.name" data-tooltip="Results for 1st result with open status" target="_blank">
-                                        
-                                    {{jsonObj.details.name}} <i class="fas fa-download"></i></a>
-                            </span>
-                            <span>
-                                <a v-if="jsonObj.avail.show" class="button download tooltip-top" :href="jsonObj.avail.link" :download="jsonObj.avail.name" data-tooltip="Results for 1st result with open status" target="_blank">
-                                    </i>
-                                    {{jsonObj.avail.name}} <i class="fas fa-download"></i></a>
-                            </span>
+                            <p>
+                                <a v-if="jsonObj.shop.show" class="button download animated bounceIn" :href="jsonObj.shop.link" :download="jsonObj.shop.name" target="_blank">
+                                    {{jsonObj.shop.name}}
+                                    <i class="fas fa-download"></i>
+                                </a>
+
+                                <span>
+                                        <a v-if="jsonObj.details.show" class="button download animated bounceIn tooltip-top" :href="jsonObj.details.link" :download="jsonObj.details.name"
+                                            data-tooltip="Results for 1st result with open status" target="_blank">
+                                            {{jsonObj.details.name}}
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <a v-if="jsonObj.avail.show" class="button download animated bounceIn tooltip-top" :href="jsonObj.avail.link" :download="jsonObj.avail.name"
+                                            data-tooltip="Results for 1st result with open status" target="_blank">
+                                            {{jsonObj.avail.name}}
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </span>
+                            </p>
                         </p>
-
-
-
-
                     </div>
+
                     <div class="third">
                         <p>
                             <i class="fas fa-file-image"></i> SVG File:
+                            <p v-if="!homeScreen" class="">Generating SVG
+                                <span class="pl-5">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </p>
+                            </span>
+                            <p v-if="homeScreen">
+                                <a class="button download tooltip-top animated bounceIn" :href="svgObj.link" :download="svgObj.name" data-tooltip="Downloads below sequence diagram"
+                                    target="_blank">
+                                    {{svgObj.name}}
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </p>
                         </p>
                     </div>
+
                     <div class="third">
                         <p>
                             <i class="fas fa-clock"></i> Time Taken:
-                            <span v-if="timeBar > 0" class="time-bar" :style="{ paddingRight: timeBar + 'px'}">{{timeSecs}} secs </span>
+                            <!-- <p v-if="timeBar > 0" class="time-bar" :style="{ width: timeBar + 'px'}">{{timeSecs}} secs </p> -->
+                            <p v-if="timeBar > 0">
+                            <a class="button download" :style="{ width: timeBar + 'px'}" disabled>
+                                    {{timeSecs}} secs
+                                </a>
+                            </p>
                         </p>
                     </div>
                 </div>
