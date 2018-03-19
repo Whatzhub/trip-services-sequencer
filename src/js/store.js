@@ -11,8 +11,10 @@ var Store = {
             ]
         },
         apiDiagram: {
-            party1: "OTA",
-            party2: "Travelport",
+            party1: "Client",
+            party2: "Hotel Search",
+            party3: "Hotel Details",
+            party4: "Hotel Avail",
             title: 'API Sequence Diagram',
             text: `Title: Hotels Sequence Diagram 
     Note over Client: Recommended Flow

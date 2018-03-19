@@ -164,8 +164,53 @@ var home = new Vue({
                     home.loader = false;
                     alert('Request failed. Please retry with a non-VPN network.')
                 })
+            
+            //add the first request on API diagram
+            var editor = ace.edit("editor");
+            editor.setValue('Title: Hotels Sequence Diagram ');
+            
+            if(this.searchObj.selectedScenarios.indexOf("Recommended Flow">=0)){
+                editor.setValue(editor.getValue()+'\n'+'Note over Client: Recommended Flow');        
+            }
 
+            editor.setValue(editor.getValue()+'\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Hotel Shop Request");
 
+            console.log(this.searchObj.selectedScenarios);
+
+        },
+        createDiagram: function(d){
+            var editor = ace.edit("editor");
+
+            if(d.event == "Hotel Shop"){
+                console.log("home",home.apiDiagram.text);                  
+                editor.setValue(editor.getValue()
+                +"\n"+home.apiDiagram.party2+'-->'+home.apiDiagram.party1+": Hotel Shop Response "+d.timeLapsed+"s"
+                +"\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party3+": Hotel Details Request");          
+
+                console.log("hotel shop fire");
+            }
+            else if(d.event == "Hotel Details"){              
+                editor.setValue(editor.getValue()
+                +"\n"+home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": Hotel Details Response "+d.timeLapsed+"s"
+                +"\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Hotel Avail Request");   
+            }
+            else if(d.event == "Hotel Avail"){              
+                editor.setValue(editor.getValue()
+                +"\n"+home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": Hotel Avail Response "+d.timeLapsed+"s");   
+            }
+        },
+        toggleScenario: function (label, name) {
+            // Allow single or multipe API scenarios sketching
+            console.log(209, label, name);
+            var index = this.searchObj.selectedScenarios.indexOf(label);
+            if (index > -1) {
+                this.searchObj.selectedScenarios.splice(index, 1);
+                this.chosenScenarios.splice(index, 1);
+            }
+            else {
+                this.searchObj.selectedScenarios.push(label);
+                this.chosenScenarios.push(name);
+            }
         },
         SSEStart: function () {
             
@@ -177,8 +222,12 @@ var home = new Vue({
             home.es.addEventListener('HOTEL-API', function (e) {
                 var d = JSON.parse(e.data);
                 console.log(132, d);
+
+                home.createDiagram(d);
+
                 home.timeBar += Math.round(d.timeLapsed * 10);
                 home.timeSecs += +d.timeLapsed;
+                
 
                 // SSE Stats
                 var data = `${d.event} took ${d.timeLapsed} secs total.`;
@@ -204,19 +253,7 @@ var home = new Vue({
                 home.es.close();
             });
         },
-        toggleScenario: function (label, name) {
-            // Allow single or multipe API scenarios sketching
-            console.log(209, label, name);
-            var index = this.searchObj.selectedScenarios.indexOf(label);
-            if (index > -1) {
-                this.searchObj.selectedScenarios.splice(index, 1);
-                this.chosenScenarios.splice(index, 1);
-            }
-            else {
-                this.searchObj.selectedScenarios.push(label);
-                this.chosenScenarios.push(name);
-            }
-        },
+        
         validateInput: function () {
             var valid = true;
             Object.keys(this.searchObj).forEach((key) => {
