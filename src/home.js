@@ -217,7 +217,7 @@ var home = new Vue({
         insertTextOnEditor: function(s,delay){
             
             if(delay==null)delay=0;
-            else delay = 500;
+            else delay = 50;
             setTimeout(function(){
                 var editor = home.editor;   
                 editor.setValue(editor.getValue()+s);
