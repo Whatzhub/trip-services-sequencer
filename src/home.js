@@ -179,35 +179,118 @@ var home = new Vue({
             var editor = ace.edit("editor");
             editor.setValue('Title: Hotels Sequence Diagram ');
             
-            if(this.searchObj.selectedScenarios.indexOf("Recommended Flow">=0)){
-                editor.setValue(editor.getValue()+'\n'+'Note over Client: Recommended Flow');        
+            if(home.judgeCase()==1){
+                home.insertTextOnEditor('\n'+'Note over Client: Recommended Flow');   
+                home.insertTextOnEditor('\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");  
+                console.log("fire case 1");   
             }
+            if(home.judgeCase()==2){
+                home.insertTextOnEditor('\n'+'Note over Client: Fast Flow');
+                home.insertTextOnEditor('\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");     
+                console.log("fire case 2");   
+            }
+            if(home.judgeCase()==3){       
+                editor.gotoLine(1);
+                for(var x =0;x<13;x++){
+                    home.insertTextOnEditorNoDelay("\n");
+                }
+                console.log("case 3 fire");
+                editor.gotoLine(2);
+                editor.insert("Note over Client: Recommended Flow");
+                editor.gotoLine(9);     
+                editor.insert("Note over Client: Fast Flow");
 
-            editor.setValue(editor.getValue()+'\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Hotel Shop Request");
-
+                editor.gotoLine(3);
+                editor.insert(home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");
+                editor.gotoLine(10);
+                editor.insert(home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");
+            }
+            
+           
             console.log(this.searchObj.selectedScenarios);
 
         },
+        insertTextOnEditorNoDelay: function(s){
+            var editor = ace.edit("editor");   
+            editor.setValue(editor.getValue()+s); 
+        },
+        insertTextOnEditor: function(s,delay){
+            
+            if(delay==null)delay=0;
+            else delay = 500;
+            setTimeout(function(){
+                var editor = ace.edit("editor");   
+                editor.setValue(editor.getValue()+s);
+            },delay);
+        },
         createDiagram: function(d){
             var editor = ace.edit("editor");
-
             if(d.event == "Hotel Shop"){
-                console.log("home",home.apiDiagram.text);                  
-                editor.setValue(editor.getValue()
-                +"\n"+home.apiDiagram.party2+'-->'+home.apiDiagram.party1+": Hotel Shop Response "+d.timeLapsed+"s"
-                +"\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party3+": Hotel Details Request");          
+                console.log("home",home.apiDiagram.text);
+                //for case 1,2        
+                if(home.judgeCase()!=3){          
+                    home.insertTextOnEditor(
+                    "\n"+home.apiDiagram.party2+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+                    
+                    if(home.judgeCase()==1)
+                        home.insertTextOnEditor("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party3+":  Request",true);
+                    else if(home.judgeCase()==2){
+                        home.insertTextOnEditor("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+":  Request",true);
+                    } 
+                }
+                else{
+                    console.log("shopping back");
+                    editor.gotoLine(4);
+                    editor.insert(home.apiDiagram.party2+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+                    editor.gotoLine(11);
+                    editor.insert(home.apiDiagram.party2+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+                    editor.gotoLine(12);
+                    editor.insert(home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Request");
+                    editor.gotoLine(5);
+                    editor.insert(home.apiDiagram.party1+'->'+home.apiDiagram.party3+": Request");
+                }         
 
                 console.log("hotel shop fire");
             }
             else if(d.event == "Hotel Details"){              
-                editor.setValue(editor.getValue()
-                +"\n"+home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": Hotel Details Response "+d.timeLapsed+"s"
-                +"\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Hotel Avail Request");   
+                home.insertTextOnEditor("\n"+home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+
+                home.insertTextOnEditor("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Request",true);   
             }
             else if(d.event == "Hotel Avail"){              
-                editor.setValue(editor.getValue()
-                +"\n"+home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": Hotel Avail Response "+d.timeLapsed+"s");   
+                home.insertTextOnEditor("\n"+home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");   
             }
+            else if(d.event == "FastHotel Avail"){
+                console.log("FastHotel back");
+                editor.gotoLine(13);
+                editor.insert(home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+            }
+            else if(d.event== "RecommendedHotel Details"){
+                console.log("RecommendedHotel detail back");
+                editor.gotoLine(6);
+                editor.insert(home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+                editor.gotoLine(7);
+                editor.insert(home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Request");
+            }
+            else if(d.event== "RecommendedHotel Avail"){
+                console.log("RecommendedHotel Avail  back");
+                editor.gotoLine(8);
+                editor.insert(home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+            }
+        },
+        judgeCase: function(){
+            //0: nothing selected, 1: Recommend Flow, 2: Fast Flow, 3: Both Case selected
+            if(this.searchObj.selectedScenarios.indexOf("Recommended Flow")>=0 &&
+            this.searchObj.selectedScenarios.indexOf("Fast Flow")>=0){
+                return 3; 
+            }
+            else if(this.searchObj.selectedScenarios.indexOf("Recommended Flow")>=0){
+                return 1;
+            }
+            else if(this.searchObj.selectedScenarios.indexOf("Fast Flow")>=0){
+                return 2;
+            }
+            else return 0;  
         },
         toggleScenario: function (label, name) {
             // Allow single or multipe API scenarios sketching
@@ -234,7 +317,7 @@ var home = new Vue({
                 console.log(132, d);
                 
                 home.createDiagram(d);
-                
+
                 home.timeBar += Math.round(d.timeLapsed * 20);
                 home.timeSecs += +d.timeLapsed;
                 home.timeSecs = +home.timeSecs.toFixed(2);
