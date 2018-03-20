@@ -49,8 +49,8 @@ async function SSE(eventName, apiName, eventId, dataObj, timeLapsed, res) {
     await res.flushHeaders();
 }
 
-async function endFlow (eventId, res) {
-    SSE('HOTEL-API', 'End SSE', 'Done', )
+async function endFlow (msg, res) {
+    SSE('HOTEL-API', 'ErrorResponse', 'Error', msg, null, res)
 }
 
 async function recommendedFlow(hotelDetails, apiName, hotelDetailsBody, bodyParams, res) {
@@ -115,11 +115,27 @@ Sequencer.sketch = async function (reqBody, resObj) {
     t2 = process.hrtime(t1);
     hotelShopTimeLapsed = (t2[0] + t2[1] / NS_PER_SEC).toFixed(2);
     console.log(79, `time took: ${hotelShopTimeLapsed}`);
-    // SSE('HOTEL-SHOP', ++hotelShopEventId, hotelShopRes, hotelShopTimeLapsed, res);
+
+    // Basic Error Handling for 400 status
+    console.log(120, hotelShopRes);
+    let errorCheck = hotelShopRes.Properties.BaseResponse;
+    // console.log(121, JSON.stringify(errorCheck));
+    if (errorCheck !== undefined) {
+        if (errorCheck.Result[0].Error[0].StatusCode == '400') {
+            await endFlow(errorCheck.Result[0].Error[0].Message, res);
+            return '400 Status Error Response';
+        } 
+    } 
+
     SSE('HOTEL-API', 'Hotel Shop', ++hotelShopEventId, hotelShopRes, hotelShopTimeLapsed, res);
 
     // Get hotels with open status only
     let openHotels = hotelShopRes.Properties.PropertyInfo.filter(i => i.status == 'Open');
+    if (openHotels.length == 0) {
+        await endFlow('There are no rooms available for your search. Please retry again.', res);
+            return 'No Rooms Avail Error Response';
+    }
+
     let hotelDetailsUrl = openHotels[0].PropertySummary.NextSteps.NextStep[0].value;
     let chainCode = openHotels[0].PropertySummary.PropertyKey.chainCode;
     let propertyCode = openHotels[0].PropertySummary.PropertyKey.propertyCode;

@@ -176,7 +176,7 @@ var home = new Vue({
                 })
             
             //add the first request on API diagram
-            var editor = ace.edit("editor");
+            var editor = home.editor;
             editor.setValue('Title: Hotels Sequence Diagram ');
             
             if(home.judgeCase()==1){
@@ -211,7 +211,7 @@ var home = new Vue({
 
         },
         insertTextOnEditorNoDelay: function(s){
-            var editor = ace.edit("editor");   
+            var editor = home.editor;   
             editor.setValue(editor.getValue()+s); 
         },
         insertTextOnEditor: function(s,delay){
@@ -219,12 +219,12 @@ var home = new Vue({
             if(delay==null)delay=0;
             else delay = 500;
             setTimeout(function(){
-                var editor = ace.edit("editor");   
+                var editor = home.editor;   
                 editor.setValue(editor.getValue()+s);
             },delay);
         },
         createDiagram: function(d){
-            var editor = ace.edit("editor");
+            var editor = home.editor;
             if(d.event == "Hotel Shop"){
                 console.log("home",home.apiDiagram.text);
                 //for case 1,2        
@@ -324,8 +324,18 @@ var home = new Vue({
 
             // Event Stream Listeners
             home.es.addEventListener('HOTEL-API', function (e) {
+                
                 var d = JSON.parse(e.data);
                 console.log(132, d);
+
+                if (e.lastEventId == 'Error') {
+                    // Close connection.
+                    home.es.close();
+                    home.loader = false;
+                    console.log(335, d.data);
+
+                    return alert(d.data);
+                }
                 
                 home.createDiagram(d);
 
