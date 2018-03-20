@@ -261,19 +261,16 @@ var home = new Vue({
                 home.insertTextOnEditor("\n"+home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");   
             }
             else if(d.event == "FastHotel Avail"){
-                console.log("FastHotel back");
                 editor.gotoLine(13);
                 editor.insert(home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
             }
             else if(d.event== "RecommendedHotel Details"){
-                console.log("RecommendedHotel detail back");
                 editor.gotoLine(6);
                 editor.insert(home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
                 editor.gotoLine(7);
                 editor.insert(home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Request");
             }
             else if(d.event== "RecommendedHotel Avail"){
-                console.log("RecommendedHotel Avail  back");
                 editor.gotoLine(8);
                 editor.insert(home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
             }
@@ -304,6 +301,20 @@ var home = new Vue({
                 this.searchObj.selectedScenarios.push(label);
                 this.chosenScenarios.push(name);
             }
+
+            if(home.judgeCase()==1){
+                console.log(210,"change 1");
+                home.editor.setValue(home.apiDiagram.senerio1Text);    
+            }
+            else if(home.judgeCase()==2){
+                console.log(210,"change 2");
+                home.editor.setValue(home.apiDiagram.senerio2Text);  
+            }
+            else if(home.judgeCase()==3||home.judgeCase()==0){
+                console.log(210,"change 3");
+                home.editor.setValue(home.apiDiagram.text);  
+            }
+
         },
         SSEStart: function () {
 

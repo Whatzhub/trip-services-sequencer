@@ -29,6 +29,20 @@ var Store = {
     Hotel Search-->Client: 2 secs
     Client->Hotel Avail: Request
     Hotel Avail-->Client: 3 secs`,
+            senerio1Text: `Title: Hotels Sequence Diagram 
+            Note over Client: Recommended Flow
+            Client->Hotel Search: Request
+            Hotel Search-->Client: 2 secs
+            Client->Hotel Details: Request
+            Hotel Details-->Client: 2 secs
+            Client->Hotel Avail: Request
+            Hotel Avail-->Client: 3 secs`,
+            senerio2Text: `Title: Hotels Sequence Diagram 
+            Note over Client: Fast Flow
+            Client->Hotel Search: Request
+            Hotel Search-->Client: 2 secs
+            Client->Hotel Avail: Request
+            Hotel Avail-->Client: 3 secs`,
             options: { theme: 'hand' }
         },
         input: {
