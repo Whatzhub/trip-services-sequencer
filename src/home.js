@@ -180,19 +180,19 @@ var home = new Vue({
             editor.setValue('Title: Hotels Sequence Diagram ');
             
             if(home.judgeCase()==1){
-                home.insertTextOnEditor('\n'+'Note over Client: Recommended Flow');   
-                home.insertTextOnEditor('\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");  
+                home.insertTextOnEditorNoDelay('\n'+'Note over Client: Recommended Flow');   
+                home.insertTextOnEditorNoDelay('\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");  
                 console.log("fire case 1");   
             }
             if(home.judgeCase()==2){
-                home.insertTextOnEditor('\n'+'Note over Client: Fast Flow');
-                home.insertTextOnEditor('\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");     
+                home.insertTextOnEditorNoDelay('\n'+'Note over Client: Fast Flow');
+                home.insertTextOnEditorNoDelay('\n'+home.apiDiagram.party1+'->'+home.apiDiagram.party2+": Request");     
                 console.log("fire case 2");   
             }
             if(home.judgeCase()==3){       
                 editor.gotoLine(1);
                 for(var x =0;x<13;x++){
-                    home.insertTextOnEditorNoDelay("\n");
+                    home.insertTextOnEditorNoDelayNoDelay("\n");
                 }
                 console.log("case 3 fire");
                 editor.gotoLine(2);
@@ -210,11 +210,11 @@ var home = new Vue({
             console.log(this.searchObj.selectedScenarios);
 
         },
-        insertTextOnEditorNoDelay: function(s){
+        insertTextOnEditorNoDelayNoDelay: function(s){
             var editor = home.editor;   
             editor.setValue(editor.getValue()+s); 
         },
-        insertTextOnEditor: function(s,delay){
+        insertTextOnEditorNoDelay: function(s,delay){
             
             if(delay==null)delay=0;
             else delay = 50;
@@ -229,13 +229,13 @@ var home = new Vue({
                 console.log("home",home.apiDiagram.text);
                 //for case 1,2        
                 if(home.judgeCase()!=3){          
-                    home.insertTextOnEditor(
+                    home.insertTextOnEditorNoDelay(
                     "\n"+home.apiDiagram.party2+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
                     
                     if(home.judgeCase()==1)
-                        home.insertTextOnEditor("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party3+":  Request",true);
+                        home.insertTextOnEditorNoDelay("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party3+":  Request",true);
                     else if(home.judgeCase()==2){
-                        home.insertTextOnEditor("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+":  Request",true);
+                        home.insertTextOnEditorNoDelay("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+":  Request",true);
                     } 
                 }
                 else{
@@ -253,12 +253,12 @@ var home = new Vue({
                 console.log("hotel shop fire");
             }
             else if(d.event == "Hotel Details"){              
-                home.insertTextOnEditor("\n"+home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
+                home.insertTextOnEditorNoDelay("\n"+home.apiDiagram.party3+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");
 
-                home.insertTextOnEditor("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Request",true);   
+                home.insertTextOnEditorNoDelay("\n"+home.apiDiagram.party1+'->'+home.apiDiagram.party4+": Request",true);   
             }
             else if(d.event == "Hotel Avail"){              
-                home.insertTextOnEditor("\n"+home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");   
+                home.insertTextOnEditorNoDelay("\n"+home.apiDiagram.party4+'-->'+home.apiDiagram.party1+": "+d.timeLapsed+"sec");   
             }
             else if(d.event == "FastHotel Avail"){
                 editor.gotoLine(13);
