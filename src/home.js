@@ -192,7 +192,7 @@ var home = new Vue({
             if(home.judgeCase()==3){       
                 editor.gotoLine(1);
                 for(var x =0;x<13;x++){
-                    home.insertTextOnEditorNoDelayNoDelay("\n");
+                    home.insertTextOnEditorNoDelay("\n");
                 }
                 console.log("case 3 fire");
                 editor.gotoLine(2);
@@ -210,14 +210,14 @@ var home = new Vue({
             console.log(this.searchObj.selectedScenarios);
 
         },
-        insertTextOnEditorNoDelayNoDelay: function(s){
+        insertTextOnEditorNoDelay: function(s){
             var editor = home.editor;   
             editor.setValue(editor.getValue()+s); 
         },
-        insertTextOnEditorNoDelay: function(s,delay){
+        insertTextOnEditor: function(s,delay){
             
             if(delay==null)delay=0;
-            else delay = 50;
+            else delay = 5000;
             setTimeout(function(){
                 var editor = home.editor;   
                 editor.setValue(editor.getValue()+s);
